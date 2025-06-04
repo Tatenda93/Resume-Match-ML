@@ -21,7 +21,7 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 # Limits file uploads to 5MB and saves them in the uploads/ folder.
 
 # Load SBERT model
-model = SentenceTransformer('../models/sbert-finetuned-resumes')
+model = SentenceTransformer('models/sbert-finetuned-resumes')
 # Loads the pretrained Sentence-BERT model, which converts full text (like resumes) into a numerical embedding representing its meaning.
 # This model was trained to understand semantic similarity between sentences.
 
@@ -116,4 +116,7 @@ def extract_top_keywords(resume_text, jd_text, top_n=5):
 
 if __name__ == '__main__':
     os.makedirs('uploads', exist_ok=True)
-    app.run(debug=True)
+    os.makedirs('static', exist_ok=True)
+
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
