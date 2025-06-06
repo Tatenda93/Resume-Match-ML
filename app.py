@@ -35,19 +35,21 @@ def read_pdf(file_path):
 
 
 def create_donut_chart(score, out_path="static/donut.png"):
-    plt.figure(figsize=(4, 4))
+    fig = plt.figure(figsize=(5, 5), facecolor="#eef3f8")
     sizes = [score, 100 - score]
-    colors = ['#4CAF50', '#dddddd']
-    labels = [f'{score}% Match', '']
+    colors = ['#0073b1', '#dddddd']
+    labels = ['', '']
 
     wedges, _ = plt.pie(sizes, colors=colors, startangle=90, labels=labels)
-    centre_circle = plt.Circle((0, 0), 0.70, fc='white')
-    fig = plt.gcf()
-    fig.gca().add_artist(centre_circle)
+    centre_circle = plt.Circle((0, 0), 0.70, fc='#eef3f8')
+    ax = fig.gca()
+    ax.add_artist(centre_circle)
+    ax.set_facecolor("#eef3f8")
 
-    plt.title("Resume Match Score")
+    plt.text(0, 0, f"{score}%", ha='center', va='center', fontsize=32, fontweight='bold', color="#0073b1")
+
     plt.tight_layout()
-    plt.savefig(out_path)
+    plt.savefig(out_path, facecolor=fig.get_facecolor())
     plt.close()
 
 #This defines the main web page (/) and allows both loading the form (GET) and submitting it (POST).
