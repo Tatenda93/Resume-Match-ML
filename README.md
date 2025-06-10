@@ -4,6 +4,8 @@ A machine learning-powered application that compares resumes to job descriptions
 
 🟢 **Live App:** [https://resume-match-ml.onrender.com/](https://resume-match-ml.onrender.com/)
 
+🟢 **Class Presentation:** [https://docs.google.com/presentation/d/1TJ4_YpCQgWk0owylhfRwUWbXCkF2O2HkYjzHC5EIIik/edit?usp=sharing](https://docs.google.com/presentation/d/1TJ4_YpCQgWk0owylhfRwUWbXCkF2O2HkYjzHC5EIIik/edit?usp=sharing)
+
 ---
 
 ## 📌 Table of Contents
