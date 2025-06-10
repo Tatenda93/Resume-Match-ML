@@ -115,6 +115,41 @@ def extract_top_keywords(resume_text, jd_text, top_n=5):
     return [kw[0] for kw in keywords]
 
 
+
+# --- Evaluation code for labeled resume/job description pairs ---
+import pandas as pd
+from sentence_transformers import InputExample
+
+def load_labeled_data(csv_path):
+    df = pd.read_csv(csv_path)
+    examples = [
+        InputExample(texts=[row['resume_text'], row['job_text']], label=float(row['label']))
+        for _, row in df.iterrows()
+        if pd.notnull(row['resume_text']) and pd.notnull(row['job_text'])
+    ]
+    return examples
+
+def evaluate_model_accuracy(model, examples, threshold=0.7):
+    from sklearn.metrics import accuracy_score
+
+    resumes = [ex.texts[0] for ex in examples]
+    jobs = [ex.texts[1] for ex in examples]
+    y_true = [int(ex.label) for ex in examples]
+
+    resume_embeddings = model.encode(resumes, convert_to_tensor=True, batch_size=32, show_progress_bar=True)
+    job_embeddings = model.encode(jobs, convert_to_tensor=True, batch_size=32, show_progress_bar=True)
+
+    sims = util.cos_sim(resume_embeddings, job_embeddings).diagonal().cpu().numpy()
+    y_pred = [1 if s >= threshold else 0 for s in sims]
+
+    accuracy = accuracy_score(y_true, y_pred)
+    print(f"Classification Accuracy: {accuracy:.2%}")
+    return accuracy
+
+# Load labeled data and evaluate
 if __name__ == '__main__':
     os.makedirs('uploads', exist_ok=True)
+    test_examples = load_labeled_data('resources/labeled_resume_job_pairs.csv')  # Ensure this file exists
+    evaluate_model_accuracy(model, test_examples)
     app.run(debug=True)
+
